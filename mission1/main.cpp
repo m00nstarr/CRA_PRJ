@@ -1,12 +1,4 @@
-#ifdef _DEBUG
-#include "gmock/gmock.h"
 
-int main() {
-    testing::InitGoogleMock();
-    return RUN_ALL_TESTS();
-}
-
-#else
 #define CLEAR_SCREEN "\033[H\033[2J"
 
 #include "assemble.cpp"
@@ -222,4 +214,3 @@ int main()
         step += 1;
     }
 }
-#endif

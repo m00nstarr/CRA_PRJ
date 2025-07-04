@@ -124,9 +124,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="assemble.cpp" />
-    <ClCompile Include="assemble_test.cpp">
-      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"> %(AdditionalOptions)</AdditionalOptions>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
