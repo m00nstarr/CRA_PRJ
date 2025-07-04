@@ -1,0 +1,287 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+        <meta charset="utf-8"/>
+	    <title>assemble_test.cpp</title>
+	    <link href="../../third-party/google-code-prettify/prettify-CppCoverage.css" type="text/css" rel="stylesheet" />
+	    <script type="text/javascript" src="../../third-party/google-code-prettify/prettify.js"></script>
+	</head>
+    <body onload="prettyPrint()">
+        <h4></h4>
+        <pre class="prettyprint lang-cpp linenums">
+#ifdef _DEBUG
+#include "assemble.cpp"
+#include "car.cpp"
+#include "gmock/gmock.h"
+
+class CarAssembleTestFixture : public testing::Test {
+public:
+
+	const std::string testPassMsg = "ÀÚµ¿Â÷ ºÎÇ° Á¶ÇÕ Å×½ºÆ® °á°ú : PASS\n";
+	const std::string testFailMsg = "ÀÚµ¿Â÷ ºÎÇ° Á¶ÇÕ Å×½ºÆ® °á°ú : FAIL\n";
+	const std::string SedanWithContinentalTestMsg = "Sedan¿¡´Â ContinentalÁ¦µ¿ÀåÄ¡ »ç¿ë ºÒ°¡\n";
+	const std::string SuvWithToyotaTestMsg = "SUV¿¡´Â TOYOTA¿£Áø »ç¿ë ºÒ°¡\n";
+	const std::string TruckWithWiaTestMsg = "Truck¿¡´Â WIA¿£Áø »ç¿ë ºÒ°¡\n";
+	const std::string TruckWithMandoTestMsg = "Truck¿¡´Â MandoÁ¦µ¿ÀåÄ¡ »ç¿ë ºÒ°¡\n";
+	const std::string BoschWithNotBoschTestMsg = "BoschÁ¦µ¿ÀåÄ¡¿¡´Â BoschÁ¶ÇâÀåÄ¡ ÀÌ¿Ü »ç¿ë ºÒ°¡\n";
+
+
+
+	Assembler* assembler;
+<span style = "background-color:#dfd">	void SetUp() override {
+		assembler = new Assembler();
+	}</span>
+};
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, setCarType)
+{
+	assembler-&gt;selectCarType(Car::CarType::SEDAN);
+	int carType = assembler-&gt;car-&gt;getCarType();
+	EXPECT_EQ(carType, Car::CarType::SEDAN);</span>
+
+<span style = "background-color:#dfd">}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, setEngineTest1)
+{
+	assembler-&gt;selectEngine(Engine::GM);
+	Engine* engine = assembler-&gt;car-&gt;getEngine();
+	EXPECT_EQ(engine-&gt;getType(), Engine::GM);</span>
+
+<span style = "background-color:#dfd">}
+TEST_F(CarAssembleTestFixture, setEngineTest2)
+{
+	assembler-&gt;selectEngine(-1);
+	Engine* engine = assembler-&gt;car-&gt;getEngine();
+	EXPECT_EQ(engine, nullptr);</span>
+
+<span style = "background-color:#dfd">}</span>
+
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, setBreakTest)
+{
+	assembler-&gt;selectBreak(Break::CONTINENTAL);
+	Break* breakSystem = assembler-&gt;car-&gt;getBrakeSystem();
+	EXPECT_EQ(breakSystem-&gt;getType(), Break::CONTINENTAL);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, setSteeringSystemTest)
+{
+	assembler-&gt;selectSteeringSystem(SteeringSystem::BOSCH_S);
+	SteeringSystem* steeringSystem = assembler-&gt;car-&gt;getSteeringSystem();
+	EXPECT_EQ(steeringSystem-&gt;getType(), SteeringSystem::BOSCH_S);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, runProducedCarTest)
+{
+	assembler-&gt;selectCarType(Car::CarType::SEDAN);
+	assembler-&gt;selectEngine(Engine::GM);
+	assembler-&gt;selectBreak(Break::MANDO);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::BOSCH_S);
+	int result = assembler-&gt;car-&gt;runProducedCar();
+	EXPECT_EQ(assembler-&gt;car-&gt;getCarType(), Car::CarType::SEDAN);
+	EXPECT_EQ(assembler-&gt;car-&gt;getEngine()-&gt;getType(), Engine::GM);
+	EXPECT_EQ(assembler-&gt;car-&gt;getBrakeSystem()-&gt;getType(), Break::MANDO);
+	EXPECT_EQ(assembler-&gt;car-&gt;getSteeringSystem()-&gt;getType(), SteeringSystem::BOSCH_S);
+	EXPECT_EQ(result, Car::RunCode::WORKING);</span>
+
+<span style = "background-color:#dfd">}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, runProducedCarTest2)
+{
+	assembler-&gt;selectCarType(Car::CarType::SEDAN);
+	assembler-&gt;selectEngine(Engine::GM);
+	assembler-&gt;selectBreak(Break::BOSCH_B);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::BOSCH_S);
+	int result = assembler-&gt;car-&gt;runProducedCar();
+	EXPECT_EQ(result, Car::RunCode::WORKING);</span>
+
+<span style = "background-color:#dfd">}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, runProducedCarTest3)
+{
+	assembler-&gt;selectCarType(Car::CarType::TRUCK);
+	assembler-&gt;selectEngine(Engine::GM);
+	assembler-&gt;selectBreak(Break::BOSCH_B);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::BOSCH_S);
+	int result = assembler-&gt;car-&gt;runProducedCar();
+	EXPECT_EQ(result, Car::RunCode::WORKING);</span>
+
+<span style = "background-color:#dfd">}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, runProducedCarTest4)
+{
+	assembler-&gt;selectCarType(Car::CarType::SUV);
+	assembler-&gt;selectEngine(Engine::GM);
+	assembler-&gt;selectBreak(Break::BOSCH_B);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::BOSCH_S);
+	int result = assembler-&gt;car-&gt;runProducedCar();
+	EXPECT_EQ(result, Car::RunCode::WORKING);</span>
+
+<span style = "background-color:#dfd">}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, runProducedCarTestBrokenEngine)
+{
+	assembler-&gt;selectCarType(Car::CarType::SEDAN);
+	assembler-&gt;selectEngine(Engine::BROKEN);
+	assembler-&gt;selectBreak(Break::MANDO);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::BOSCH_S);
+	int result = assembler-&gt;car-&gt;runProducedCar();
+	EXPECT_EQ(assembler-&gt;car-&gt;getCarType(), Car::CarType::SEDAN);
+	EXPECT_EQ(assembler-&gt;car-&gt;getEngine()-&gt;getType(), Engine::BROKEN);
+	EXPECT_EQ(assembler-&gt;car-&gt;getBrakeSystem()-&gt;getType(), Break::MANDO);
+	EXPECT_EQ(assembler-&gt;car-&gt;getSteeringSystem()-&gt;getType(), SteeringSystem::BOSCH_S);
+	EXPECT_EQ(result, Car::RunCode::BROKEN_ENGINE);</span>
+
+<span style = "background-color:#dfd">}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, runProducedCarInvalidTest)
+{
+	assembler-&gt;selectCarType(Car::CarType::SEDAN);
+	assembler-&gt;selectEngine(Engine::GM);
+	assembler-&gt;selectBreak(Break::CONTINENTAL);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::BOSCH_S);
+	int result = assembler-&gt;car-&gt;runProducedCar();
+	EXPECT_EQ(result, Car::RunCode::NOT_WORKING);</span>
+
+<span style = "background-color:#dfd">}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, runProducedCarInvalidTest2)
+{
+	assembler-&gt;selectCarType(Car::CarType::SUV);
+	assembler-&gt;selectEngine(Engine::TOYOTA);
+	assembler-&gt;selectBreak(Break::CONTINENTAL);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::BOSCH_S);
+	int result = assembler-&gt;car-&gt;runProducedCar();
+	EXPECT_EQ(result, Car::RunCode::NOT_WORKING);</span>
+
+<span style = "background-color:#dfd">}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, runProducedCarInvalidTest3)
+{
+	assembler-&gt;selectCarType(Car::CarType::SUV);
+	assembler-&gt;selectEngine(Engine::TOYOTA);
+	assembler-&gt;selectBreak(Break::CONTINENTAL);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::BOSCH_S);
+	int result = assembler-&gt;car-&gt;runProducedCar();
+	EXPECT_EQ(result, Car::RunCode::NOT_WORKING);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, runProducedCarInvalidTest4)
+{
+	assembler-&gt;selectCarType(Car::CarType::SUV);
+	assembler-&gt;selectEngine(Engine::TOYOTA);
+	assembler-&gt;selectBreak(Break::BOSCH_B);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::MOBIS);
+	int result = assembler-&gt;car-&gt;runProducedCar();
+	EXPECT_EQ(result, Car::RunCode::NOT_WORKING);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, runProducedCarInvalidTest5)
+{
+	assembler-&gt;selectCarType(Car::CarType::TRUCK);
+	assembler-&gt;selectEngine(Engine::WIA);
+	assembler-&gt;selectBreak(Break::BOSCH_B);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::BOSCH_S);
+	int result = assembler-&gt;car-&gt;runProducedCar();
+	EXPECT_EQ(result, Car::RunCode::NOT_WORKING);
+}</span>
+
+
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, runProducedCarInvalidTest6)
+{
+	assembler-&gt;selectCarType(Car::CarType::TRUCK);
+	assembler-&gt;selectEngine(Engine::TOYOTA);
+	assembler-&gt;selectBreak(Break::MANDO);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::MOBIS);
+	int result = assembler-&gt;car-&gt;runProducedCar();
+	EXPECT_EQ(result, Car::RunCode::NOT_WORKING);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, runProducedCarInvalidTest7)
+{
+	assembler-&gt;selectCarType(Car::CarType::TRUCK);
+	assembler-&gt;selectEngine(Engine::TOYOTA);
+	assembler-&gt;selectBreak(Break::BOSCH_B);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::MOBIS);
+	int result = assembler-&gt;car-&gt;runProducedCar();
+	EXPECT_EQ(result, Car::RunCode::NOT_WORKING);
+}</span>
+
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, testProducedCarTest0)
+{
+	assembler-&gt;selectCarType(Car::CarType::SUV);
+	assembler-&gt;selectEngine(Engine::GM);
+	assembler-&gt;selectBreak(Break::BOSCH_B);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::BOSCH_S);
+	std::string result = assembler-&gt;car-&gt;testProducedCar();
+	EXPECT_EQ(result, testPassMsg);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, testProducedCarTest1)
+{
+	assembler-&gt;selectCarType(Car::CarType::SEDAN);
+	assembler-&gt;selectEngine(Engine::TOYOTA);
+	assembler-&gt;selectBreak(Break::CONTINENTAL);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::MOBIS);
+	std::string result = assembler-&gt;car-&gt;testProducedCar();
+	EXPECT_EQ(result,  testFailMsg + SedanWithContinentalTestMsg);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, testProducedCarTest2)
+{
+	assembler-&gt;selectCarType(Car::CarType::SUV);
+	assembler-&gt;selectEngine(Engine::TOYOTA);
+	assembler-&gt;selectBreak(Break::CONTINENTAL);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::MOBIS);
+	std::string result = assembler-&gt;car-&gt;testProducedCar();
+	EXPECT_EQ(result, testFailMsg + SuvWithToyotaTestMsg);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, testProducedCarTest3)
+{
+	assembler-&gt;selectCarType(Car::CarType::TRUCK);
+	assembler-&gt;selectEngine(Engine::WIA);
+	assembler-&gt;selectBreak(Break::CONTINENTAL);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::MOBIS);
+	std::string result = assembler-&gt;car-&gt;testProducedCar();
+	EXPECT_EQ(result, testFailMsg + TruckWithWiaTestMsg);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, testProducedCarTest4)
+{
+	assembler-&gt;selectCarType(Car::CarType::TRUCK);
+	assembler-&gt;selectEngine(Engine::TOYOTA);
+	assembler-&gt;selectBreak(Break::MANDO);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::MOBIS);
+	std::string result = assembler-&gt;car-&gt;testProducedCar();
+	EXPECT_EQ(result, testFailMsg + TruckWithMandoTestMsg);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTestFixture, testProducedCarTest5)
+{
+	assembler-&gt;selectCarType(Car::CarType::TRUCK);
+	assembler-&gt;selectEngine(Engine::TOYOTA);
+	assembler-&gt;selectBreak(Break::BOSCH_B);
+	assembler-&gt;selectSteeringSystem(SteeringSystem::MOBIS);
+	std::string result = assembler-&gt;car-&gt;testProducedCar();
+	EXPECT_EQ(result, testFailMsg + BoschWithNotBoschTestMsg);
+}</span>
+
+#endif</pre>
+        <hr />
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th align="center">
+                        <small>Generated by</small>
+                        <a href="https://github.com/OpenCppCoverage/OpenCppCoverage/releases">
+                            <strong>OpenCppCoverage (Version: 0.9.9.0)</strong>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+        <meta charset="utf-8"/>
+	    <title>car.cpp</title>
+	    <link href="../../third-party/google-code-prettify/prettify-CppCoverage.css" type="text/css" rel="stylesheet" />
+	    <script type="text/javascript" src="../../third-party/google-code-prettify/prettify.js"></script>
+	</head>
+    <body onload="prettyPrint()">
+        <h4></h4>
+        <pre class="prettyprint lang-cpp linenums">
+#pragma once
+#include &lt;iostream&gt;
+#include "engine.cpp"
+#include "steering.cpp"
+#include "breakSystem.cpp"
+
+class Car {
+public:
+    //BreakSystem* breakSystem;
+    //SteeringSystem* steeringSystem;
+
+    enum RunCode {
+        WORKING = 0,
+		NOT_WORKING,
+        BROKEN_ENGINE,
+
+    };
+
+    enum CarType
+    {
+        SEDAN = 1,
+        SUV,
+        TRUCK
+    };
+
+    int isValidCheck()
+<span style = "background-color:#dfd">    {
+        int carType = this-&gt;type;
+		int engineType = engine-&gt;getType();
+		int brakeType = breakSystem-&gt;getType();
+		int steeringType = steeringSystem-&gt;getType();</span>
+
+        //Â÷·® º° Á¦¾à »çÇ×
+<span style = "background-color:#dfd">        if (carType == Car::SEDAN)</span>
+        {
+<span style = "background-color:#dfd">            if (brakeType == Break::CONTINENTAL) {
+                return false;</span>
+            }
+        }
+
+<span style = "background-color:#dfd">        if (carType == Car::SUV) {
+            if (engineType == Engine::TOYOTA) {
+                return false;</span>
+            }
+		}
+
+<span style = "background-color:#dfd">        if( carType == Car::TRUCK) {
+            if (engineType == Engine::WIA) {
+                return false;</span>
+            }
+<span style = "background-color:#dfd">            if (brakeType == Break::MANDO) {
+                return false;</span>
+            }
+		}
+
+<span style = "background-color:#dfd">        if (brakeType == Break::BOSCH_B &amp;&amp; steeringType != SteeringSystem::BOSCH_S)</span>
+        {
+<span style = "background-color:#dfd">            return false;</span>
+        }
+
+<span style = "background-color:#dfd">        return true;
+    }</span>
+
+    int runProducedCar()
+<span style = "background-color:#dfd">    {
+        if (isValidCheck() == false)</span>
+        {
+<span style = "background-color:#dfd">            printf("ÀÚµ¿Â÷°¡ µ¿ÀÛµÇÁö ¾Ê½À´Ï´Ù\n");
+            return RunCode::NOT_WORKING;</span>
+        }
+
+<span style = "background-color:#dfd">        if( getEngine()-&gt;getType() == Engine::BROKEN )</span>
+        {
+<span style = "background-color:#dfd">            printf("¿£ÁøÀÌ °íÀå³ªÀÖ½À´Ï´Ù.\n");
+            printf("ÀÚµ¿Â÷°¡ ¿òÁ÷ÀÌÁö ¾Ê½À´Ï´Ù.\n");
+            return BROKEN_ENGINE;</span>
+		}
+
+<span style = "background-color:#dfd">        printCarType();
+        printEngineType();
+        printBreakSystem();
+        printSteeringSystem();
+        printf("ÀÚµ¿Â÷°¡ µ¿ÀÛµË´Ï´Ù.\n");
+		return RunCode::WORKING;
+    }</span>
+
+    std::string testProducedCar()
+<span style = "background-color:#dfd">    {
+        std::string testResult;
+        int carType = this-&gt;type;
+        int engineType = engine-&gt;getType();
+        int brakeType = breakSystem-&gt;getType();
+        int steeringType = steeringSystem-&gt;getType();</span>
+
+        
+<span style = "background-color:#dfd">        if (carType == Car::SEDAN)</span>
+        {
+<span style = "background-color:#dfd">            if (brakeType == Break::CONTINENTAL) {
+                testResult = "ÀÚµ¿Â÷ ºÎÇ° Á¶ÇÕ Å×½ºÆ® °á°ú : FAIL\n";
+                testResult += "Sedan¿¡´Â ContinentalÁ¦µ¿ÀåÄ¡ »ç¿ë ºÒ°¡\n";</span>
+
+<span style = "background-color:#dfd">                return testResult;</span>
+            }
+        }
+        
+<span style = "background-color:#dfd">        if (carType == Car::SUV) {
+            if (engineType == Engine::TOYOTA) {
+                testResult = "ÀÚµ¿Â÷ ºÎÇ° Á¶ÇÕ Å×½ºÆ® °á°ú : FAIL\n";
+                testResult += "SUV¿¡´Â TOYOTA¿£Áø »ç¿ë ºÒ°¡\n";</span>
+
+<span style = "background-color:#dfd">                return testResult;</span>
+            }
+        }
+
+<span style = "background-color:#dfd">        if (carType == Car::TRUCK) {
+            if (engineType == Engine::WIA) {
+                testResult = "ÀÚµ¿Â÷ ºÎÇ° Á¶ÇÕ Å×½ºÆ® °á°ú : FAIL\n";
+				testResult += "Truck¿¡´Â WIA¿£Áø »ç¿ë ºÒ°¡\n";
+                return testResult;</span>
+            }
+<span style = "background-color:#dfd">            if (brakeType == Break::MANDO) {
+                testResult = "ÀÚµ¿Â÷ ºÎÇ° Á¶ÇÕ Å×½ºÆ® °á°ú : FAIL\n";
+				testResult += "Truck¿¡´Â MandoÁ¦µ¿ÀåÄ¡ »ç¿ë ºÒ°¡\n";
+                return testResult;</span>
+            }
+        }
+
+<span style = "background-color:#dfd">        if (brakeType == Break::BOSCH_B &amp;&amp; steeringType != SteeringSystem::BOSCH_S)</span>
+        {
+<span style = "background-color:#dfd">			testResult = "ÀÚµ¿Â÷ ºÎÇ° Á¶ÇÕ Å×½ºÆ® °á°ú : FAIL\n";
+			testResult += "BoschÁ¦µ¿ÀåÄ¡¿¡´Â BoschÁ¶ÇâÀåÄ¡ ÀÌ¿Ü »ç¿ë ºÒ°¡\n";
+            return testResult;</span>
+        }
+
+<span style = "background-color:#dfd">        return "ÀÚµ¿Â÷ ºÎÇ° Á¶ÇÕ Å×½ºÆ® °á°ú : PASS\n";
+    }</span>
+
+<span style = "background-color:#dfd">    void printCarType() {
+        switch (type) {</span>
+            case SEDAN:
+<span style = "background-color:#dfd">                std::cout &lt;&lt; "Car Type : Sedan\n";
+                break;</span>
+            case SUV:
+<span style = "background-color:#dfd">                std::cout &lt;&lt; "Car Type : SUV\n";
+                break;</span>
+            case TRUCK:
+<span style = "background-color:#dfd">                std::cout &lt;&lt; "Car Type : Truck\n";</span>
+                break;
+        }
+<span style = "background-color:#dfd">	}</span>
+
+<span style = "background-color:#dfd">    void printEngineType() {
+        std::cout &lt;&lt; "Engine Type : " &lt;&lt; engine-&gt;getName() &lt;&lt; "\n";
+    }</span>
+
+<span style = "background-color:#dfd">    void printBreakSystem() {
+        std::cout &lt;&lt; "Brake System : " &lt;&lt; breakSystem-&gt;getName() &lt;&lt; "\n";
+	}</span>
+
+<span style = "background-color:#dfd">    void printSteeringSystem() {
+        std::cout &lt;&lt; "Steering System : " &lt;&lt; steeringSystem-&gt;getName() &lt;&lt; "\n";
+    }</span>
+
+<span style = "background-color:#dfd">    int getCarType() {
+        return type;
+	}</span>
+
+<span style = "background-color:#dfd">    void setCarType(int selectedType){
+        type = selectedType;
+    }</span>
+
+<span style = "background-color:#dfd">    Engine * getEngine() {
+        return engine;
+	}</span>
+
+<span style = "background-color:#dfd">    void setEngine(Engine* engine) {
+        this-&gt;engine = engine;
+	}</span>
+
+<span style = "background-color:#dfd">    Break * getBrakeSystem() {
+        return breakSystem;
+	}</span>
+
+<span style = "background-color:#dfd">    void setBrakeSystem(Break* breakSystem) {
+        this-&gt;breakSystem = breakSystem;
+    }</span>
+
+<span style = "background-color:#dfd">    SteeringSystem* getSteeringSystem() {
+        return steeringSystem;
+    }</span>
+
+<span style = "background-color:#dfd">    void setSteeringSystem(SteeringSystem* steeringSystem) {
+        this-&gt;steeringSystem = steeringSystem;
+	}</span>
+
+private :
+    int type;
+    Engine* engine;
+	Break* breakSystem;
+    SteeringSystem* steeringSystem;
+};</pre>
+        <hr />
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th align="center">
+                        <small>Generated by</small>
+                        <a href="https://github.com/OpenCppCoverage/OpenCppCoverage/releases">
+                            <strong>OpenCppCoverage (Version: 0.9.9.0)</strong>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </body>
+</html>
